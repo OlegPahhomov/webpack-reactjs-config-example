@@ -1,9 +1,11 @@
+@import 'bootstrap/customizations';
+
 html, body {
   height: 100%;
   //background: url('./images/cat.jpg') no-repeat center;
   background-size: cover;
-  p {
-    color: red;
+  h1 {
+    color: $brand-success;
   }
 }
 
