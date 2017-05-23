@@ -1,4 +1,5 @@
-const css = require('./app.scss');
+import './app.scss';
+import './contacts.html';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

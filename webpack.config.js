@@ -21,7 +21,6 @@ const bootStrapConfig = isProd ? bootStrapEntryPoints.prod : bootStrapEntryPoint
 module.exports = {
     entry: {
         app: "./src/app.js",
-        contacts: "./src/contacts.js",
         bootstrap: bootStrapConfig
     },
     output: {
@@ -36,13 +35,18 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: __dirname + '/node_modules',
+                exclude: path.resolve(__dirname, 'node_modules'),
                 use: 'babel-loader'
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/,
                 use: ['file-loader?name=[name].[ext]&outputPath=images/',
                     'image-webpack-loader']
+            },
+            {
+                test: /\.html$/,
+                use: ['file-loader?name=[name].[ext]&outputPath=/'],
+                exclude: path.resolve(__dirname, 'src/index.html')
             },
             {
                 test: /\.(woff2?|svg)$/,
@@ -72,17 +76,7 @@ module.exports = {
                 collapseWhitespace: true
             },
             hash: true,
-            excludeChunks: ['contacts'],
             template: './src/index.html'
-        }),
-        new HtmlWebpackPlugin({
-            minify: {
-                collapseWhitespace: true
-            },
-            hash: true,
-            filename: 'contacts.html',
-            chunks: ['contacts'],
-            template: './src/contacts.html'
         }),
         new ExtractTextPlugin({
             filename: 'css/[name].css',
