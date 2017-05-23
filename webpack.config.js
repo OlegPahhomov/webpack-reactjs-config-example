@@ -19,6 +19,7 @@ const cssConfig = isProd ? cssProd : cssDev;
 const bootStrapConfig = isProd ? bootStrapEntryPoints.prod : bootStrapEntryPoints.dev;
 
 module.exports = {
+    devtool: 'eval',
     entry: {
         app: "./src/app.js",
         bootstrap: bootStrapConfig
