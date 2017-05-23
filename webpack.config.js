@@ -1,7 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
+const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const PurifyCSSPlugin = require("purifycss-webpack");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const bootStrapEntryPoints = require('./webpack.bootstrap.config');
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -86,8 +89,13 @@ module.exports = {
             disable: !isProd,
             allChunks: true
         }),
+        new PurifyCSSPlugin({
+            // Give paths to parse for rules. These should be absolute!
+            paths: glob.sync(path.join(__dirname, 'src/*.html')),
+        }),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin()
+        new webpack.NamedModulesPlugin(),
+        new OptimizeCssAssetsPlugin()
     ]
 }
 ;
