@@ -9,6 +9,7 @@
     "build": "NODE_ENV=production webpack -p",
     "clean": "rimraf ./dist/* "
   },
+
   "author": "",
   "license": "ISC",
   "devDependencies": {
