@@ -21,12 +21,16 @@ const bootStrapConfig = isProd ? bootStrapEntryPoints.prod : bootStrapEntryPoint
 module.exports = {
     devtool: 'eval',
     entry: {
+        vendor: [
+            'react',
+            'react-dom',
+        ],
         app: "./src/app.js",
         bootstrap: bootStrapConfig
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: "[name].bundle.js",
+        filename: "[name].bundle.[hash].js",
     },
     module: {
         rules: [
@@ -46,7 +50,12 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: ['file-loader?name=[name].[ext]&outputPath=/'],
+                use: ['file-loader?name=[name].[ext]&outputPath=html/'],
+                exclude: path.resolve(__dirname, 'src/index.html')
+            },
+            {
+                test: /\.html$/,
+                loader: 'html-minify-loader',
                 exclude: path.resolve(__dirname, 'src/index.html')
             },
             {
@@ -90,7 +99,28 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
-        new OptimizeCssAssetsPlugin()
+        new OptimizeCssAssetsPlugin(),
+        new webpack.ProvidePlugin({
+            react: "react",
+            "react-dom": "react-dom"
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            minChunks: Infinity,
+        }),
+        new webpack.LoaderOptionsPlugin({
+            test: /\.html$/,
+            options: {
+                'html-minify-loader': {
+                    empty: true,        // KEEP empty attributes
+                    cdata: true,        // KEEP CDATA from scripts
+                    comments: true,     // KEEP comments
+                    dom: {                            // options of !(htmlparser2)[https://github.com/fb55/htmlparser2]
+                        lowerCaseAttributeNames: false,      // do not call .toLowerCase for each attribute name (Angular2 use camelCase attributes)
+                    }
+                }
+            },
+        })
     ]
 }
 ;
